@@ -4,6 +4,5 @@
     "jsx": "react-jsx",
     "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src", "tests", "e2e"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "tests", "e2e"]
 }

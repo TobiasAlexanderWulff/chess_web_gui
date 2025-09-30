@@ -1,5 +1,6 @@
 # Chess Web GUI
 
+[![CI](https://github.com/tobiasalexanderwulff/chess_web_gui/actions/workflows/ci.yml/badge.svg)](https://github.com/tobiasalexanderwulff/chess_web_gui/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/tobiasalexanderwulff/chess_web_gui?display_name=tag)](https://github.com/tobiasalexanderwulff/chess_web_gui/releases)
 [![Release Workflow](https://github.com/tobiasalexanderwulff/chess_web_gui/actions/workflows/release.yml/badge.svg)](https://github.com/tobiasalexanderwulff/chess_web_gui/actions/workflows/release.yml)
 
@@ -19,7 +20,7 @@ npm run dev
 - `npm run test` – execute Vitest unit suites.
 - `npm run lint` – run ESLint against the repository.
 - `npm run format` – check formatting with Prettier (`npm run format:write` to apply fixes).
-- `npm run e2e` – trigger Playwright tests (requires the dev server running in another terminal).
+- `npm run e2e` – trigger Playwright tests (auto-builds and serves a preview for tests).
 
 ## Versioning
 
