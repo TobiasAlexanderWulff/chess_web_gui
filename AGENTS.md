@@ -6,6 +6,9 @@ Follow the layout described in `vision.md`. Place UI code under `src/`, with `sr
 ## Directory-Specific AGENTS Files
 In every subdirectory of medium to greater importance, create and maintain an `AGENTS.md` with directory-specific instructions (structure, conventions, run/test tips). These files apply to the directory subtree, and more deeply nested `AGENTS.md` files take precedence over parents.
 
+## Meta Planning
+Reference the ongoing coordination notes in [`docs/meta-plan.md`](docs/meta-plan.md) when aligning repository-wide initiatives.
+
 ## Build, Test, and Development Commands
 Install dependencies with `npm install` (Node 18+). Run the dev server via `npm run dev` to launch Vite with hot reloading. Produce a production bundle using `npm run build`, which must stay warning-free. Execute fast unit suites with `npm run test`. Run linting and formatting checks through `npm run lint` and `npm run format` before opening a PR. Use `npx playwright test` for end-to-end verification covering match flows.
 
