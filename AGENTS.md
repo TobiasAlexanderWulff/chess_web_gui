@@ -20,3 +20,17 @@ The repo has no history yet—start with Conventional Commits (`feat(board): hig
 
 ## Architecture Notes
 Treat `vision.md` as the source of truth for connectors, persistence, and analysis flows. Validate new features against the HTTP and UCI contracts described there, and update the document when assumptions change.
+
+## Directory AGENTS Index
+The following subtrees include directory-specific `AGENTS.md` files:
+- `src/AGENTS.md`
+- `src/components/AGENTS.md`
+- `src/state/AGENTS.md`
+- `src/connectors/AGENTS.md`
+- `src/connectors/http/AGENTS.md`
+- `src/connectors/uci/AGENTS.md`
+- `src/types/AGENTS.md`
+- `src/styles/AGENTS.md`
+- `tests/AGENTS.md`
+- `e2e/AGENTS.md`
+- `public/AGENTS.md`
