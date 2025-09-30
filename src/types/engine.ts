@@ -2,9 +2,9 @@ import type { BoardState } from "./state";
 
 export type StartSearchOptions = {
   depth?: number;
-  movetimeMs?: number;
-  wtimeMs?: number;
-  btimeMs?: number;
+  movetime_ms?: number;
+  wtime_ms?: number;
+  btime_ms?: number;
 };
 
 export type EngineRequestContext = {
