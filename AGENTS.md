@@ -3,6 +3,9 @@
 ## Project Structure & Module Organization
 Follow the layout described in `vision.md`. Place UI code under `src/`, with `src/components/` for presentational pieces, `src/state/` for the store, and `src/connectors/http|uci/` for engine adapters. Use `public/` for static assets (icons, manifest). Keep shared types in `src/types/`. Add unit tests next to code as `__tests__/` folders, and end-to-end specs under `e2e/`. Document architecture decisions in `docs/` alongside `vision.md`.
 
+## Directory-Specific AGENTS Files
+In every subdirectory of medium to greater importance, create and maintain an `AGENTS.md` with directory-specific instructions (structure, conventions, run/test tips). These files apply to the directory subtree, and more deeply nested `AGENTS.md` files take precedence over parents.
+
 ## Build, Test, and Development Commands
 Install dependencies with `npm install` (Node 18+). Run the dev server via `npm run dev` to launch Vite with hot reloading. Produce a production bundle using `npm run build`, which must stay warning-free. Execute fast unit suites with `npm run test`. Run linting and formatting checks through `npm run lint` and `npm run format` before opening a PR. Use `npx playwright test` for end-to-end verification covering match flows.
 
