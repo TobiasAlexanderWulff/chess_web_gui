@@ -1,0 +1,17 @@
+import { createContext } from "react";
+import type { Dispatch, SetStateAction } from "react";
+
+import type { BoardState } from "../types/state";
+
+export type MatchContextValue = {
+  board: BoardState;
+  setBoard: Dispatch<SetStateAction<BoardState>>;
+};
+
+export const defaultState: BoardState = {
+  fen: "startpos",
+  turn: "white",
+  moves: []
+};
+
+export const MatchContext = createContext<MatchContextValue | undefined>(undefined);
