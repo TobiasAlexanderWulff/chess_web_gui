@@ -32,7 +32,7 @@ Use judgment: if consumers must change code or configuration to upgrade, it’s 
    - `npm version major` for MAJOR
    Optionally include a message: `-m "chore(release): v%s"`.
 4. Push commit and tags: `git push && git push --tags`.
-5. Create a GitHub release with highlights and link to PRs (optional).
+5. CI creates a GitHub Release from the tag and uploads `dist.zip` automatically. Add highlights and migration notes to the release as needed.
 
 ## Notes
 - The authoritative version lives in `package.json`.

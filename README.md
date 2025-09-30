@@ -1,5 +1,8 @@
 # Chess Web GUI
 
+[![Latest Release](https://img.shields.io/github/v/release/tobiasalexanderwulff/chess_web_gui?display_name=tag)](https://github.com/tobiasalexanderwulff/chess_web_gui/releases)
+[![Release Workflow](https://github.com/tobiasalexanderwulff/chess_web_gui/actions/workflows/release.yml/badge.svg)](https://github.com/tobiasalexanderwulff/chess_web_gui/actions/workflows/release.yml)
+
 This project hosts a standalone browser client for playing chess locally or against remote engines. The scaffold is built with Vite, React, and TypeScript, with Vitest for unit testing and Playwright for end-to-end coverage.
 
 ## Getting Started
@@ -27,4 +30,4 @@ Convenience scripts:
 - `npm run release:minor` – bump minor version
 - `npm run release:major` – bump major version
 
-Note: Running any release script triggers `preversion` to lint, test, and build.
+Note: Running any release script triggers `preversion` to lint, test, and build. Tag pushes (e.g., `v1.2.3`) automatically create a GitHub Release with the built artifact via CI.
