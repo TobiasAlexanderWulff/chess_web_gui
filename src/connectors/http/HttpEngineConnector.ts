@@ -3,11 +3,34 @@ import type {
   EngineRequestContext,
   StartSearchOptions
 } from "../../types/engine";
-import type { BoardState } from "../../types/state";
+import type {
+  BoardState,
+  MoveRecord
+} from "../../types/state";
 
 const defaultEndpoint = "/api";
 
 type Fetcher = typeof fetch;
+
+type StateMovePayload = {
+  ply: number;
+  san: string;
+  uci?: string;
+  evaluation?: string;
+};
+
+type StatePayload = {
+  fen: string;
+  turn: "white" | "black";
+  move_history?: StateMovePayload[];
+  legal_moves?: string[];
+  status?: BoardState["status"];
+  last_move?: StateMovePayload | null;
+  clocks?: {
+    white_ms?: number;
+    black_ms?: number;
+  } | null;
+};
 
 export class HttpEngineConnector implements EngineConnector {
   readonly id = "http";
@@ -35,21 +58,9 @@ export class HttpEngineConnector implements EngineConnector {
       return null;
     }
 
-    const payload = (await response.json()) as {
-      fen: string;
-      turn: "white" | "black";
-      move_history: Array<{ san: string; ply: number; evaluation?: string }>;
-    };
+    const payload = (await response.json()) as StatePayload;
 
-    return {
-      fen: payload.fen,
-      turn: payload.turn,
-      moves: payload.move_history.map((move) => ({
-        ply: move.ply,
-        san: move.san,
-        evaluation: move.evaluation
-      }))
-    };
+    return this.toBoardState(payload);
   }
 
   async submitMove(move: string, { gameId }: EngineRequestContext): Promise<BoardState> {
@@ -65,21 +76,9 @@ export class HttpEngineConnector implements EngineConnector {
       throw new Error(`Move rejected: ${response.status}`);
     }
 
-    const nextState = (await response.json()) as {
-      fen: string;
-      turn: "white" | "black";
-      move_history: Array<{ san: string; ply: number; evaluation?: string }>;
-    };
+    const nextState = (await response.json()) as StatePayload;
 
-    return {
-      fen: nextState.fen,
-      turn: nextState.turn,
-      moves: nextState.move_history.map((moveRecord) => ({
-        ply: moveRecord.ply,
-        san: moveRecord.san,
-        evaluation: moveRecord.evaluation
-      }))
-    };
+    return this.toBoardState(nextState);
   }
 
   async startSearch(
@@ -101,5 +100,40 @@ export class HttpEngineConnector implements EngineConnector {
 
   async stopSearch(_context: EngineRequestContext): Promise<void> {
     await Promise.resolve();
+  }
+
+  private mapMoveRecord(record: StateMovePayload): MoveRecord {
+    return {
+      ply: record.ply,
+      san: record.san,
+      uci: record.uci,
+      evaluation: record.evaluation
+    };
+  }
+
+  private toBoardState(payload: StatePayload): BoardState {
+    const legalMoves = payload.legal_moves ?? [];
+    const status = payload.status ?? "in_progress";
+    const lastMove = payload.last_move ? this.mapMoveRecord(payload.last_move) : null;
+    const clocksPayload = payload.clocks;
+    const clocks =
+      clocksPayload &&
+      typeof clocksPayload.white_ms === "number" &&
+      typeof clocksPayload.black_ms === "number"
+        ? {
+            whiteMs: clocksPayload.white_ms,
+            blackMs: clocksPayload.black_ms
+          }
+        : null;
+
+    return {
+      fen: payload.fen,
+      turn: payload.turn,
+      moves: (payload.move_history ?? []).map((entry) => this.mapMoveRecord(entry)),
+      legalMoves,
+      status,
+      lastMove,
+      clocks
+    };
   }
 }

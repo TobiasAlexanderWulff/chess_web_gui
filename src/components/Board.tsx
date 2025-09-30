@@ -30,7 +30,11 @@ const Board: FC<BoardProps> = ({ connector }) => {
           setBoard({
             fen: initialFen,
             turn: "white",
-            moves: []
+            moves: [],
+            legalMoves: [],
+            status: "in_progress",
+            lastMove: null,
+            clocks: null
           });
         }
       } catch (error) {

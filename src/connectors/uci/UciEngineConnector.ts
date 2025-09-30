@@ -14,7 +14,11 @@ export class UciEngineConnector implements EngineConnector {
     return {
       fen: "startpos",
       turn: "white",
-      moves: []
+      moves: [],
+      legalMoves: [],
+      status: "in_progress",
+      lastMove: null,
+      clocks: null
     };
   }
 
@@ -27,9 +31,19 @@ export class UciEngineConnector implements EngineConnector {
         {
           ply: 1,
           san: move,
+          uci: move,
           evaluation: undefined
         }
-      ]
+      ],
+      legalMoves: [],
+      status: "in_progress",
+      lastMove: {
+        ply: 1,
+        san: move,
+        uci: move,
+        evaluation: undefined
+      },
+      clocks: null
     };
   }
 

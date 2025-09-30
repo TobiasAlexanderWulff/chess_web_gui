@@ -13,7 +13,11 @@ export type MatchContextValue = {
 export const defaultState: BoardState = {
   fen: "startpos",
   turn: "white",
-  moves: []
+  moves: [],
+  legalMoves: [],
+  status: "in_progress",
+  lastMove: null,
+  clocks: null
 };
 
 export const MatchContext = createContext<MatchContextValue | undefined>(undefined);

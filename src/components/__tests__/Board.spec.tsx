@@ -22,7 +22,17 @@ const connector: EngineConnector = {
       moves: [
         { ply: 1, san: "e4" },
         { ply: 1, san: "e5" }
-      ]
+      ],
+      legalMoves: ["g1f3"],
+      status: "in_progress",
+      lastMove: {
+        ply: 1,
+        san: "e5"
+      },
+      clocks: {
+        whiteMs: 300000,
+        blackMs: 300000
+      }
     };
   },
   async submitMove(move: string, _context: EngineRequestContext) {
