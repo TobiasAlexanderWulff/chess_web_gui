@@ -31,3 +31,9 @@ Convenience scripts:
 - `npm run release:major` – bump major version
 
 Note: Running any release script triggers `preversion` to lint, test, and build. Tag pushes (e.g., `v1.2.3`) automatically create a GitHub Release with the built artifact via CI.
+
+## Changelog
+
+- View changes: CHANGELOG.md or the Releases page
+- Preview next notes: `npm run changelog:preview`
+- Update changelog: `npm run changelog` (commonly in a release PR)

@@ -31,8 +31,11 @@ Use judgment: if consumers must change code or configuration to upgrade, it’s 
    - `npm version minor` for MINOR
    - `npm version major` for MAJOR
    Optionally include a message: `-m "chore(release): v%s"`.
-4. Push commit and tags: `git push && git push --tags`.
-5. CI creates a GitHub Release from the tag and uploads `dist.zip` automatically. Add highlights and migration notes to the release as needed.
+4. Update changelog:
+   - Preview upcoming notes: `npm run changelog:preview`
+   - Update `CHANGELOG.md`: `npm run changelog` (commit in the release PR if desired)
+5. Push commit and tags: `git push && git push --tags`.
+6. CI creates a GitHub Release from the tag, generating notes from Conventional Commits and uploading `dist.zip` automatically.
 
 ## Notes
 - The authoritative version lives in `package.json`.

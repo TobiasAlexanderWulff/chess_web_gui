@@ -30,6 +30,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Generate release notes (Conventional Commits)
+        run: npx --yes conventional-changelog-cli -p conventionalcommits -r 1 -o RELEASE_NOTES.md
+
       - name: Archive dist
         run: |
           cd dist
@@ -40,6 +43,6 @@ jobs:
         with:
           files: |
             dist.zip
+          body_path: RELEASE_NOTES.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-

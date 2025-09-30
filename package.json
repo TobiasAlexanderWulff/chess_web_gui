@@ -14,6 +14,8 @@
     "format:write": "prettier --cache --write .",
     "e2e": "playwright test",
     "preversion": "npm run lint && npm run test && npm run build",
+    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
+    "changelog:preview": "conventional-changelog -p conventionalcommits -r 1",
     "release:patch": "npm version patch -m \"chore(release): v%s\"",
     "release:minor": "npm version minor -m \"chore(release): v%s\"",
     "release:major": "npm version major -m \"chore(release): v%s\""
