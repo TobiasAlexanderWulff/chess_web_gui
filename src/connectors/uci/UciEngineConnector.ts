@@ -1,4 +1,8 @@
-import type { EngineConnector } from "../../types/engine";
+import type {
+  EngineConnector,
+  EngineRequestContext,
+  StartSearchOptions
+} from "../../types/engine";
 import type { BoardState } from "../../types/state";
 
 export class UciEngineConnector implements EngineConnector {
@@ -6,7 +10,7 @@ export class UciEngineConnector implements EngineConnector {
 
   readonly label = "Local UCI";
 
-  async fetchState(): Promise<BoardState | null> {
+  async fetchState(_context: EngineRequestContext): Promise<BoardState | null> {
     return {
       fen: "startpos",
       turn: "white",
@@ -14,7 +18,7 @@ export class UciEngineConnector implements EngineConnector {
     };
   }
 
-  async submitMove(move: string): Promise<BoardState> {
+  async submitMove(move: string, _context: EngineRequestContext): Promise<BoardState> {
     console.info("UCI connector received move", move);
     return {
       fen: "startpos",
@@ -29,11 +33,14 @@ export class UciEngineConnector implements EngineConnector {
     };
   }
 
-  async startSearch(): Promise<void> {
+  async startSearch(
+    _options: StartSearchOptions | undefined,
+    _context: EngineRequestContext
+  ): Promise<void> {
     console.info("UCI connector startSearch placeholder");
   }
 
-  async stopSearch(): Promise<void> {
+  async stopSearch(_context: EngineRequestContext): Promise<void> {
     console.info("UCI connector stopSearch placeholder");
   }
 }

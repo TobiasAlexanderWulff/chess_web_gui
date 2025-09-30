@@ -3,12 +3,19 @@ import { describe, expect, it } from "vitest";
 
 import Board from "../../components/Board";
 import { MatchProvider } from "../../state";
-import type { EngineConnector } from "../../types/engine";
+import type {
+  EngineConnector,
+  EngineRequestContext,
+  StartSearchOptions
+} from "../../types/engine";
 
 const connector: EngineConnector = {
   id: "test",
   label: "Test Connector",
-  async fetchState() {
+  async fetchState({ gameId }: EngineRequestContext) {
+    if (gameId !== "test-game") {
+      throw new Error(`Unexpected game id ${gameId}`);
+    }
     return {
       fen: "rn1qkbnr/ppp2ppp/4p3/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 4",
       turn: "white",
@@ -18,13 +25,16 @@ const connector: EngineConnector = {
       ]
     };
   },
-  async submitMove(move) {
+  async submitMove(move: string, _context: EngineRequestContext) {
     throw new Error(`Not implemented ${move}`);
   },
-  async startSearch() {
+  async startSearch(
+    _options: StartSearchOptions | undefined,
+    _context: EngineRequestContext
+  ) {
     return undefined;
   },
-  async stopSearch() {
+  async stopSearch(_context: EngineRequestContext) {
     return undefined;
   }
 };
@@ -32,7 +42,7 @@ const connector: EngineConnector = {
 describe("Board", () => {
   it("renders FEN and move history", async () => {
     render(
-      <MatchProvider>
+      <MatchProvider initialGameId="test-game">
         <Board connector={connector} />
       </MatchProvider>
     );

@@ -1,4 +1,8 @@
-import type { EngineConnector } from "../../types/engine";
+import type {
+  EngineConnector,
+  EngineRequestContext,
+  StartSearchOptions
+} from "../../types/engine";
 import type { BoardState } from "../../types/state";
 
 const defaultEndpoint = "/api";
@@ -15,8 +19,16 @@ export class HttpEngineConnector implements EngineConnector {
     private readonly fetcher: Fetcher = globalThis.fetch
   ) {}
 
-  async fetchState(): Promise<BoardState | null> {
-    const response = await this.fetcher(`${this.baseUrl}/games/current/state`);
+  private buildGameUrl(gameId: string, suffix: string) {
+    if (!gameId) {
+      throw new Error("HttpEngineConnector requires a gameId for HTTP calls.");
+    }
+
+    return `${this.baseUrl}/games/${gameId}/${suffix}`;
+  }
+
+  async fetchState({ gameId }: EngineRequestContext): Promise<BoardState | null> {
+    const response = await this.fetcher(this.buildGameUrl(gameId, "state"));
 
     if (!response.ok) {
       console.warn("HTTP connector returned", response.status);
@@ -40,8 +52,8 @@ export class HttpEngineConnector implements EngineConnector {
     };
   }
 
-  async submitMove(move: string): Promise<BoardState> {
-    const response = await this.fetcher(`${this.baseUrl}/games/current/move`, {
+  async submitMove(move: string, { gameId }: EngineRequestContext): Promise<BoardState> {
+    const response = await this.fetcher(this.buildGameUrl(gameId, "move"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -70,8 +82,11 @@ export class HttpEngineConnector implements EngineConnector {
     };
   }
 
-  async startSearch(options?: { depth?: number; movetimeMs?: number }): Promise<void> {
-    const response = await this.fetcher(`${this.baseUrl}/games/current/search`, {
+  async startSearch(
+    options: StartSearchOptions | undefined,
+    { gameId }: EngineRequestContext
+  ): Promise<void> {
+    const response = await this.fetcher(this.buildGameUrl(gameId, "search"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -84,7 +99,7 @@ export class HttpEngineConnector implements EngineConnector {
     }
   }
 
-  async stopSearch(): Promise<void> {
+  async stopSearch(_context: EngineRequestContext): Promise<void> {
     await Promise.resolve();
   }
 }

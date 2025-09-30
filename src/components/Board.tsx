@@ -11,14 +11,19 @@ type BoardProps = {
 };
 
 const Board: FC<BoardProps> = ({ connector }) => {
-  const { board, setBoard } = useMatch();
+  const { board, setBoard, gameId } = useMatch();
 
   useEffect(() => {
     let isCurrent = true;
 
     async function hydrate() {
       try {
-        const state = await connector.fetchState();
+        if (!gameId) {
+          console.warn("No active game id available; skipping fetchState call.");
+          return;
+        }
+
+        const state = await connector.fetchState({ gameId });
         if (isCurrent && state) {
           setBoard(state);
         } else if (isCurrent && !state) {
@@ -38,7 +43,7 @@ const Board: FC<BoardProps> = ({ connector }) => {
     return () => {
       isCurrent = false;
     };
-  }, [connector, setBoard]);
+  }, [connector, gameId, setBoard]);
 
   return (
     <section className="board">

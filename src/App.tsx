@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Board from "./components/Board";
 import { HttpEngineConnector } from "./connectors/http";
 import { UciEngineConnector } from "./connectors/uci";
 import type { EngineConnector } from "./types/engine";
+import { useMatch } from "./state";
 
 const defaultHttpConnector = new HttpEngineConnector();
 const defaultUciConnector = new UciEngineConnector();
@@ -12,6 +13,7 @@ function App() {
   const [activeConnector, setActiveConnector] = useState<EngineConnector>(
     defaultHttpConnector
   );
+  const { gameId, setGameId } = useMatch();
 
   const connectors = useMemo(
     () => [
@@ -20,6 +22,12 @@ function App() {
     ],
     []
   );
+
+  useEffect(() => {
+    if (!gameId) {
+      setGameId("current"); // TODO: replace with session creation response
+    }
+  }, [gameId, setGameId]);
 
   return (
     <div className="app-shell">

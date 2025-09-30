@@ -7,11 +7,15 @@ export type StartSearchOptions = {
   btimeMs?: number;
 };
 
+export type EngineRequestContext = {
+  gameId: string;
+};
+
 export type EngineConnector = {
   id: string;
   label: string;
-  fetchState: () => Promise<BoardState | null>;
-  submitMove: (move: string) => Promise<BoardState>;
-  startSearch: (options?: StartSearchOptions) => Promise<void>;
-  stopSearch: () => Promise<void>;
+  fetchState: (context: EngineRequestContext) => Promise<BoardState | null>;
+  submitMove: (move: string, context: EngineRequestContext) => Promise<BoardState>;
+  startSearch: (options: StartSearchOptions | undefined, context: EngineRequestContext) => Promise<void>;
+  stopSearch: (context: EngineRequestContext) => Promise<void>;
 };
