@@ -21,6 +21,14 @@ The repo has no history yet—start with Conventional Commits (`feat(board): hig
 ## Architecture Notes
 Treat `vision.md` as the source of truth for connectors, persistence, and analysis flows. Validate new features against the HTTP and UCI contracts described there, and update the document when assumptions change.
 
+## Versioning
+Maintain the project version using Semantic Versioning `major.minor.patch`. Keep the authoritative version in `package.json` and bump it with `npm version` when merging to `main`.
+- Major: breaking changes to public APIs or contracts (e.g., HTTP/UCI interfaces in `vision.md`) that require user migration.
+- Minor: backwards-compatible feature additions or improvements.
+- Patch: backwards-compatible bug fixes and low-risk improvements (perf, docs, tooling).
+
+See `docs/versioning.md` for detailed rules and release steps.
+
 ## Directory AGENTS Index
 The following subtrees include directory-specific `AGENTS.md` files:
 - `src/AGENTS.md`
