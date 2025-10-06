@@ -2,8 +2,10 @@
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
+    "target": "ESNext",
     "resolveJsonModule": true,
+    "noEmit": true,
     "strict": true,
     "strictNullChecks": true,
     "types": ["node"]
