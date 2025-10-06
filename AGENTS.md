@@ -52,11 +52,31 @@ Beachte Root‑Richtlinien in AGENTS.md auf Repository‑Ebene. Ergänzungen/Abw
 - Backend (Gateway/Proxy): FastAPI, Pydantic, pytest+HTTPX. Keine Engine‑Logik in diesem Repo implementieren.
 - Tests nahe am geänderten Code ergänzen/aktualisieren. Keine unbeteiligten Baustellen anfassen.
 
+## Teststrategie
+- Prüfe Änderungen lokal, bevor du sie in CI gibst. Dokumentiere Abweichungen.
+- Frontend
+  - Unit/Component-Tests mit Vitest + Testing Library.
+  - Optional Playwright-E2E für Kern-Flows (Move-Eingabe, API-Interaktion, Touch/Drag & Drop).
+- Backend (Gateway)
+  - pytest + FastAPI TestClient für alle Endpunkte (inkl. Fehlerpfade).
+  - Contract-Tests gegen `docs/openapi.yaml` (z.B. JSON-Schema-Validierung).
+- Smoke-/Regressionstests automatisieren, sobald sich stabile Flows ergeben.
+- Ohne Tests keine Merge-Freigabe, Ausnahme mit kurzer Begründung im PR-Kommentar dokumentieren.
+
 ## Arbeitsweise für Agenten
 - Plane komplexe Tasks in überschaubare Schritte und halte den Plan aktuell. Markiere erledigte Schritte und reduziere Scope, wenn möglich.
 - Vor schreibenden Aktionen kurz ankündigen, danach knapp zusammenfassen, was umgesetzt wurde.
 - Files mit kleinsten, fokussierten Patches ändern. Re‑Runnables (Build/Test) lokal validieren, wenn vorhanden.
 - Bei potenziellen Breaking Changes: explizit hervorheben, Impact analysieren, Versionserhöhung vorschlagen.
+
+## Planung & Roadmap
+- Vor Aufnahme größerer Aufgaben (mehrere Teilziele, Team- oder Sprint-Impact) MUSS ein Plan als Markdown unter `docs/plans/` angelegt werden (`docs/plans/<topic>-<YYYYMMDD>.md`).
+  - Inhalte: Zielsetzung, Scope, Annahmen, Abhängigkeiten, Deliverables, Teststrategie, Rollback.
+  - Plan während der Umsetzung aktuell halten oder mit Verweis schließen, falls hinfällig.
+- `docs/ROADMAP.md` fungiert als strategischer Leitfaden.
+  - Vor Projektstart Meilensteine, Releases, Prioritäten definieren.
+  - Während der Umsetzung regelmäßig pflegen; Änderungen datieren und kurz begründen.
+  - Pläne müssen zur Roadmap passen; bei Konflikten Roadmap zuerst aktualisieren.
 
 ## Konfiguration und Sicherheit
 - Konfiguration über env‑Variablen (z.B. `API_BASE_URL`, `ENGINE_MODE`, `ENGINE_HTTP_URL`, `ENGINE_UCI_CMD`, `CORS_ORIGINS`, `LOG_LEVEL`). Keine Secrets einchecken.

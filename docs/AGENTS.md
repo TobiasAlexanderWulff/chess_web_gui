@@ -4,6 +4,8 @@ Geltungsbereich: Dieses Dokument gilt für alle Inhalte unterhalb von `docs/`. B
 
 Leitlinien für Dokumentation
 - Quelle der Wahrheit: `docs/openapi.yaml` für die API, `docs/VISION.md` für Ziele, `docs/techstack.md` für Implementierungsstack.
+- Roadmap: `docs/ROADMAP.md` als strategischer Leitfaden pflegen (Meilensteine, Prioritäten). Änderungen datieren und begründen.
+- Planungsdokumente: größere Aufgaben mit einem Plan unter `docs/plans/` (Markdown) starten; Plan während der Umsetzung aktuell halten.
 - Schreibstil: prägnant, deutsch/englisch konsistent, klare Abschnittsüberschriften, kurze Absätze, Aufzählungen bevorzugen.
 - Querverweise: relative Pfade verwenden (z. B. `docs/techstack.md`). Keine externen Protokoll‑URIs im Codeblock (z. B. `file://`).
 - Versionierung: Änderungen mit Nutzerwirkung im `docs/CHANGELOG.md` vermerken und abwägen, ob eine Versionsanhebung in `VERSION` sinnvoll ist. Vorschlag an User machen, vor Anpassung.
@@ -12,4 +14,3 @@ Leitlinien für Dokumentation
 Qualitätssicherung
 - Bei API‑Änderungen: `docs/openapi.yaml` aktualisieren und mit CI validieren lassen.
 - Bei neuen Features: README und relevante Doku‑Seiten ergänzen, Screenshots/Diagramme nach Bedarf.
-
