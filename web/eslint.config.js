@@ -3,6 +3,10 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const rootDir = dirname(fileURLToPath(import.meta.url))
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -11,8 +15,8 @@ export default tseslint.config(
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.app.json', './tsconfig.node.json'],
-        tsconfigRootDir: import.meta.dirname
+        project: ['./tsconfig.app.json', './tsconfig.test.json', './tsconfig.node.json'],
+        tsconfigRootDir: rootDir
       },
       globals: {
         ...globals.browser
@@ -39,6 +43,18 @@ export default tseslint.config(
         it: 'readonly',
         expect: 'readonly'
       }
+    }
+  },
+  {
+    files: ['vite.config.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json'],
+        tsconfigRootDir: rootDir
+      }
+    },
+    rules: {
+      '@typescript-eslint/prefer-nullish-coalescing': 'off'
     }
   }
 )
