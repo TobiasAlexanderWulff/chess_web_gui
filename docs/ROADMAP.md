@@ -41,7 +41,6 @@ Diese Roadmap dient als laufender Leitfaden für Planung und Umsetzung. Sie muss
 - Datenschutz/Telemetry-Policy abstimmen
 
 ## Nächste Schritte (aktualisieren, sobald erledigt)
-- [ ] Frontend & Gateway Pläne erstellen (`docs/plans/`)
-- [ ] Scaffold Frontend + Gateway
+- [x] Frontend & Gateway Pläne erstellen (`docs/plans/`) – 2025-10-06
+- [ ] Scaffold Frontend + Gateway (Gateway-Healthcheck aktiv)
 - [ ] Entscheidungslog für Engine-Integrationsmodus festhalten
-

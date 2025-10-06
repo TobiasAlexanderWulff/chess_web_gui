@@ -17,14 +17,15 @@ Ein moderner, webbasierter Schach-Client, der über HTTP oder UCI mit einer exte
 - `AGENTS.md` – Root-Governance (Pflege von Sub-AGENTS, Versionierung, Doku, CI).
 - `VERSION` – Semantic-Versioning-Quelle.
 - `web/` – Vite/React-Frontend inkl. lokaler Governance (`web/AGENTS.md`).
-- (geplant) `server/` – FastAPI-Gateway/Proxy.
+- `server/` – FastAPI-Gateway (Health-Check, Basis-Test, lokale Governance).
 
 ## Getting Started
 1. Repository klonen oder aktualisieren.
 2. Dokumentation durchgehen (`docs/`), insbesondere Techstack und OpenAPI.
 3. Für neue Ordner direkt ein lokales `AGENTS.md` anlegen (siehe Root-Template).
 4. Frontend starten: `cd web && pnpm install && pnpm dev` (siehe Abschnitt „Frontend Development“).
-5. Nach Änderungen `VERSION`/`docs/CHANGELOG.md` prüfen und ggf. Versionsupdate vorschlagen.
+5. Gateway lokal testen: `cd server && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && uvicorn main:app --reload`.
+6. Nach Änderungen `VERSION`/`docs/CHANGELOG.md` prüfen und ggf. Versionsupdate vorschlagen.
 
 ## Frontend Development
 - `cd web`
@@ -33,6 +34,13 @@ Ein moderner, webbasierter Schach-Client, der über HTTP oder UCI mit einer exte
 - `pnpm test` führt Vitest inklusive Testing Library aus.
 - `pnpm lint` nutzt ESLint (Flat Config) über TypeScript/React-Dateien.
 - `pnpm build` erzeugt einen Produktions-Build unter `web/dist`.
+
+## Backend Development
+- `cd server`
+- `python -m venv .venv && source .venv/bin/activate`
+- `pip install -r requirements.txt`
+- `uvicorn main:app --reload --port 8000` startet das Gateway (Health-Check erreichbar unter `/healthz`).
+- `python -m pytest` führt die verfügbaren Gateway-Tests aus.
 
 ## Tests & Continuous Integration
 - GitHub Actions prüft
