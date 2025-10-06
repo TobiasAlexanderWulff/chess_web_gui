@@ -7,11 +7,20 @@ import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const rootDir = dirname(fileURLToPath(import.meta.url))
+const tsFileGlobs = ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']
+const typeCheckedConfigs = tseslint.configs.recommendedTypeChecked.map((config) =>
+  config.files ? config : { ...config, files: tsFileGlobs }
+)
+const stylisticTypeCheckedConfigs = tseslint.configs.stylisticTypeChecked.map((config) =>
+  config.files ? config : { ...config, files: tsFileGlobs }
+)
 
-export default tseslint.config(
+export default [
   { ignores: ['dist'] },
+  js.configs.recommended,
+  ...typeCheckedConfigs,
+  ...stylisticTypeCheckedConfigs,
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked, ...tseslint.configs.stylisticTypeChecked],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
@@ -57,4 +66,4 @@ export default tseslint.config(
       '@typescript-eslint/prefer-nullish-coalescing': 'off'
     }
   }
-)
+]
