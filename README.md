@@ -13,23 +13,31 @@ Ein moderner, webbasierter Schach-Client, der über HTTP oder UCI mit einer exte
 
 ## Repository-Struktur
 - `docs/` – Vision, OpenAPI, Techstack, Changelog, lokale AGENTS-Richtlinien.
-- `.github/workflows/ci.yml` – GitHub Actions Workflow (OpenAPI-Check, optionale FE/BE-Jobs).
+- `.github/workflows/ci.yml` – GitHub Actions Workflow (OpenAPI-Check, Frontend/Backend-Jobs).
 - `AGENTS.md` – Root-Governance (Pflege von Sub-AGENTS, Versionierung, Doku, CI).
 - `VERSION` – Semantic-Versioning-Quelle.
-- (geplant) `web/` – Vite/React-Frontend.
+- `web/` – Vite/React-Frontend inkl. lokaler Governance (`web/AGENTS.md`).
 - (geplant) `server/` – FastAPI-Gateway/Proxy.
 
 ## Getting Started
 1. Repository klonen oder aktualisieren.
 2. Dokumentation durchgehen (`docs/`), insbesondere Techstack und OpenAPI.
 3. Für neue Ordner direkt ein lokales `AGENTS.md` anlegen (siehe Root-Template).
-4. Frontend/Backend scaffolding gemäß „Schnellstart“ in `docs/techstack.md` durchführen, sobald die Implementierung beginnt.
+4. Frontend starten: `cd web && pnpm install && pnpm dev` (siehe Abschnitt „Frontend Development“).
 5. Nach Änderungen `VERSION`/`docs/CHANGELOG.md` prüfen und ggf. Versionsupdate vorschlagen.
+
+## Frontend Development
+- `cd web`
+- `pnpm install`
+- `pnpm dev` startet den lokalen Vite-Dev-Server auf Port 5173.
+- `pnpm test -- --run` führt Vitest inklusive Testing Library aus.
+- `pnpm lint` nutzt ESLint (Flat Config) über TypeScript/React-Dateien.
+- `pnpm build` erzeugt einen Produktions-Build unter `web/dist`.
 
 ## Tests & Continuous Integration
 - GitHub Actions prüft
   - OpenAPI-Spezifikation (immer).
-  - Frontend (`web/`), sobald `package.json` existiert (Lint/Test/Build per pnpm).
+  - Frontend (`web/`): pnpm install, `pnpm lint`, `pnpm test -- --run`, `pnpm build`.
   - Backend (`server/`), sobald `requirements.txt` oder `pyproject.toml` vorhanden ist (Lint/Test mit Python 3.12).
 - Lokale Tests spiegeln diese Jobs wider. Bitte neue Skripte/Targets in zukünftigen Projektschritten ergänzen.
 
@@ -44,6 +52,6 @@ Ein moderner, webbasierter Schach-Client, der über HTTP oder UCI mit einer exte
 - Breaking Changes klar kennzeichnen und Versionssprung mit der Projektleitung abstimmen.
 
 ## Nächste Schritte (Empfehlung)
-1. Frontend-Basis (Vite/React) unter `web/` anlegen und CI-Checks aktivieren.
-2. FastAPI-Gateway (`server/`) mit Proxy/Bridge-Gerüst implementieren.
+1. Frontend-Komponenten für Board/Spielsteuerung entwickeln und an Mock-Daten anbinden.
+2. FastAPI-Gateway (`server/`) mit Proxy/Bridge-Gerüst implementieren und gegen `docs/openapi.yaml` testen.
 3. README & Doku nach jeder Erweiterung aktualisieren; Version 0.1.0 anstreben, sobald erste funktionale Oberfläche verfügbar ist.

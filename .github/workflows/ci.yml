@@ -61,18 +61,18 @@ jobs:
         if: ${{ steps.detect_frontend.outputs.found == 'true' }}
         working-directory: web
         run: pnpm install --frozen-lockfile=false
-      - name: Lint (if present)
+      - name: Lint
         if: ${{ steps.detect_frontend.outputs.found == 'true' }}
         working-directory: web
-        run: pnpm -s run lint || echo "skip lint"
-      - name: Test (if present)
+        run: pnpm run lint
+      - name: Test
         if: ${{ steps.detect_frontend.outputs.found == 'true' }}
         working-directory: web
-        run: pnpm -s run test -- --run || echo "skip test"
-      - name: Build (if present)
+        run: pnpm run test -- --run
+      - name: Build
         if: ${{ steps.detect_frontend.outputs.found == 'true' }}
         working-directory: web
-        run: pnpm -s run build || echo "skip build"
+        run: pnpm run build
 
   backend:
     name: Backend Lint/Test

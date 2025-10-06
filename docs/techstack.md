@@ -73,10 +73,11 @@ Alternative: Rust (Axum) statt FastAPI, wenn spätere Performance/Profiling im F
 
 **Schnellstart (lokal)**
 - Frontend
-  - `pnpm create vite web --template react-ts`
-  - `cd web && pnpm i && pnpm add tailwindcss postcss autoprefixer && npx tailwindcss init -p`
-  - `pnpm add @tanstack/react-query react-router-dom react-i18next i18next react-chessboard chess.js zustand`
-  - `pnpm dev`
+  - `cd web`
+  - `pnpm install`
+  - `pnpm dev` (Vite-Dev-Server)
+  - `pnpm test -- --run` (Vitest + Testing Library)
+  - `pnpm lint` (ESLint, Flat Config)
 - Backend
   - `python -m venv .venv && source .venv/bin/activate`
   - `pip install fastapi uvicorn pydantic[dotenv]` (bei UCI‑Bridge zusätzlich `python-chess`)
