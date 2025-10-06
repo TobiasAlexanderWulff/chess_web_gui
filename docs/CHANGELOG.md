@@ -8,6 +8,8 @@ Alle nennenswerten Änderungen an diesem Projekt werden in dieser Datei festgeha
 - Frontend-Testskripte auf nicht-interaktiven Durchlauf (`vitest --run`) gestellt, damit lokale/CI-Läufe ohne manuelles Beenden funktionieren.
 - Gateway-Planung in `docs/plans/gateway-scaffolding-20251006.md` dokumentiert.
 - FastAPI-Gateway-Skelett (`server/`) mit `/healthz`-Endpoint, Tests und Requirements hinzugefügt.
+- Entscheidungslog `docs/decision-engine-mode-20251006.md` legt HTTP-Passthrough als initialen Integrationsmodus fest.
+- Frontend zeigt Gateway-Gesundheit über `/healthz` und Board-Platzhalter in `web/src/App.tsx` an.
 
 ## [0.0.1] - 2025-10-06
 - Initiale Struktur für Governance & Doku: `AGENTS.md` (Root) mit Regeln zu Sub-AGENTS, Versionierung, Doku-Pflege, CI auf main.

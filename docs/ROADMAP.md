@@ -43,4 +43,4 @@ Diese Roadmap dient als laufender Leitfaden für Planung und Umsetzung. Sie muss
 ## Nächste Schritte (aktualisieren, sobald erledigt)
 - [x] Frontend & Gateway Pläne erstellen (`docs/plans/`) – 2025-10-06
 - [ ] Scaffold Frontend + Gateway (Gateway-Healthcheck aktiv)
-- [ ] Entscheidungslog für Engine-Integrationsmodus festhalten
+- [x] Entscheidungslog für Engine-Integrationsmodus festhalten – 2025-10-06 (`docs/decision-engine-mode-20251006.md`)
