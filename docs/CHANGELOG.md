@@ -5,6 +5,7 @@ Alle nennenswerten Änderungen an diesem Projekt werden in dieser Datei festgeha
 ## [Unreleased]
 - Frontend-Grundgerüst unter `web/` hinzugefügt (Vite + React + TypeScript, Tests mit Vitest/TL) und CI-Job für Lint/Test/Build aktiviert.
 - Planungsdokument `docs/plans/frontend-scaffolding-20251006.md` ergänzt, um Scope und Tests für den Aufbau festzuhalten.
+- Frontend-Testskripte auf nicht-interaktiven Durchlauf (`vitest --run`) gestellt, damit lokale/CI-Läufe ohne manuelles Beenden funktionieren.
 
 ## [0.0.1] - 2025-10-06
 - Initiale Struktur für Governance & Doku: `AGENTS.md` (Root) mit Regeln zu Sub-AGENTS, Versionierung, Doku-Pflege, CI auf main.

@@ -68,7 +68,7 @@ jobs:
       - name: Test
         if: ${{ steps.detect_frontend.outputs.found == 'true' }}
         working-directory: web
-        run: pnpm run test -- --run
+        run: pnpm run test
       - name: Build
         if: ${{ steps.detect_frontend.outputs.found == 'true' }}
         working-directory: web

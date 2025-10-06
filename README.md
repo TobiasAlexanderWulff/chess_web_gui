@@ -30,14 +30,14 @@ Ein moderner, webbasierter Schach-Client, der über HTTP oder UCI mit einer exte
 - `cd web`
 - `pnpm install`
 - `pnpm dev` startet den lokalen Vite-Dev-Server auf Port 5173.
-- `pnpm test -- --run` führt Vitest inklusive Testing Library aus.
+- `pnpm test` führt Vitest inklusive Testing Library aus.
 - `pnpm lint` nutzt ESLint (Flat Config) über TypeScript/React-Dateien.
 - `pnpm build` erzeugt einen Produktions-Build unter `web/dist`.
 
 ## Tests & Continuous Integration
 - GitHub Actions prüft
   - OpenAPI-Spezifikation (immer).
-  - Frontend (`web/`): pnpm install, `pnpm lint`, `pnpm test -- --run`, `pnpm build`.
+  - Frontend (`web/`): pnpm install, `pnpm lint`, `pnpm test`, `pnpm build`.
   - Backend (`server/`), sobald `requirements.txt` oder `pyproject.toml` vorhanden ist (Lint/Test mit Python 3.12).
 - Lokale Tests spiegeln diese Jobs wider. Bitte neue Skripte/Targets in zukünftigen Projektschritten ergänzen.
 

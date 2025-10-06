@@ -76,7 +76,7 @@ Alternative: Rust (Axum) statt FastAPI, wenn spätere Performance/Profiling im F
   - `cd web`
   - `pnpm install`
   - `pnpm dev` (Vite-Dev-Server)
-  - `pnpm test -- --run` (Vitest + Testing Library)
+  - `pnpm test` (Vitest + Testing Library)
   - `pnpm lint` (ESLint, Flat Config)
 - Backend
   - `python -m venv .venv && source .venv/bin/activate`
