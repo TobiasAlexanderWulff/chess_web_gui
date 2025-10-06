@@ -12,7 +12,7 @@ The Computer will be a chess engine, which will be accessed
 or
 2. (optional) plugged in locally via UCI protocol.
 
-## API Calls (for now from localhost:5050)
+## API Calls (for now from localhost:8000)
 
 | Method | Path | Description | Request Body | Success Response |
 |--------|------|-------------|--------------|------------------|

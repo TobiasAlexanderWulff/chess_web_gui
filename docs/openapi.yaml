@@ -1,0 +1,363 @@
+openapi: 3.0.3
+info:
+  title: Chess Engine API
+  version: 0.0.1
+servers:
+  - url: http://localhost:8000
+paths:
+  /healthz:
+    get:
+      summary: Liveness probe
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                required: [status]
+  /api/games:
+    post:
+      summary: Create a new game
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGameResponse'
+  /api/games/{game_id}/state:
+    get:
+      summary: Get current game state
+      parameters:
+        - in: path
+          name: game_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Current state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameState'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/games/{game_id}/position:
+    post:
+      summary: Set position from FEN
+      parameters:
+        - in: path
+          name: game_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fen:
+                  type: string
+              required: [fen]
+      responses:
+        '200':
+          description: Updated state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameState'
+        '400':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/games/{game_id}/move:
+    post:
+      summary: Apply UCI move
+      parameters:
+        - in: path
+          name: game_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                move:
+                  type: string
+                  description: UCI move string
+              required: [move]
+      responses:
+        '200':
+          description: Updated state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameState'
+        '400':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/games/{game_id}/search:
+    post:
+      summary: Run a search from current position
+      parameters:
+        - in: path
+          name: game_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                depth:
+                  type: integer
+                  minimum: 1
+                  maximum: 64
+                movetime_ms:
+                  type: integer
+                  minimum: 1
+                tt_max_entries:
+                  type: integer
+                  minimum: 1
+      responses:
+        '200':
+          description: Search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/games/{game_id}/undo:
+    post:
+      summary: Undo the last move
+      parameters:
+        - in: path
+          name: game_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Updated state after undo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameState'
+        '400':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/perft:
+    post:
+      summary: Perft from FEN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fen:
+                  type: string
+                depth:
+                  type: integer
+                  minimum: 0
+                  default: 1
+              required: [fen]
+      responses:
+        '200':
+          description: Node count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nodes:
+                    type: integer
+        '400':
+          $ref: '#/components/responses/Error'
+
+components:
+  schemas:
+    CreateGameResponse:
+      type: object
+      properties:
+        game_id:
+          type: string
+        fen:
+          type: string
+      required: [game_id, fen]
+    GameState:
+      type: object
+      properties:
+        game_id:
+          type: string
+        fen:
+          type: string
+        legal_moves:
+          type: array
+          items:
+            type: string
+        in_check:
+          type: boolean
+        checkmate:
+          type: boolean
+        stalemate:
+          type: boolean
+        draw:
+          type: boolean
+        last_move:
+          type: string
+          nullable: true
+        move_history:
+          type: array
+          items:
+            type: string
+      required:
+        [game_id, fen, legal_moves, in_check, checkmate, stalemate, draw, move_history]
+    SearchResult:
+      type: object
+      properties:
+        best_move:
+          type: string
+          nullable: true
+        score:
+          nullable: true
+          oneOf:
+            - type: 'null'
+            - type: object
+              required: [cp]
+              properties:
+                cp:
+                  type: integer
+            - type: object
+              required: [mate]
+              properties:
+                mate:
+                  type: integer
+        pv:
+          type: array
+          items:
+            type: string
+        nodes:
+          type: integer
+        qnodes:
+          type: integer
+        seldepth:
+          type: integer
+        tt_hits:
+          type: integer
+        tt_exact_hits:
+          type: integer
+        tt_lower_hits:
+          type: integer
+        tt_upper_hits:
+          type: integer
+        fail_high:
+          type: integer
+        fail_low:
+          type: integer
+        tt_probes:
+          type: integer
+        re_searches:
+          type: integer
+        iters:
+          type: array
+          items:
+            type: object
+            properties:
+              depth:
+                type: integer
+              time_ms:
+                type: integer
+              nodes:
+                type: integer
+              qnodes:
+                type: integer
+              fail_high:
+                type: integer
+              fail_low:
+                type: integer
+            required: [depth, time_ms, nodes, qnodes, fail_high, fail_low]
+        tt_stores:
+          type: integer
+        tt_replacements:
+          type: integer
+        tt_size:
+          type: integer
+        hashfull:
+          type: integer
+        depth:
+          type: integer
+        time_ms:
+          type: integer
+      required:
+        [
+          pv,
+          nodes,
+          qnodes,
+          tt_hits,
+          tt_exact_hits,
+          tt_lower_hits,
+          tt_upper_hits,
+          fail_high,
+          fail_low,
+          tt_probes,
+          re_searches,
+          iters,
+          tt_stores,
+          tt_replacements,
+          tt_size,
+          seldepth,
+          hashfull,
+          depth,
+          time_ms,
+        ]
+  responses:
+    Error:
+      description: Structured error response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  request_id:
+                    type: string
+                  field_errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        field:
+                          type: string
+                        code:
+                          type: string
+                        message:
+                          type: string
+                      required: [field, code, message]
+                required: [code, message, type, request_id]

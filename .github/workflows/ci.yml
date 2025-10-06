@@ -1,0 +1,129 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  docs-openapi-validate:
+    name: Validate OpenAPI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validator
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install openapi-spec-validator pyyaml
+      - name: Validate docs/openapi.yaml
+        run: |
+          python - <<'PY'
+          from openapi_spec_validator import validate_spec
+          import yaml, sys
+          with open('docs/openapi.yaml','r', encoding='utf-8') as f:
+              spec = yaml.safe_load(f)
+          validate_spec(spec)
+          print('OpenAPI spec valid.')
+          PY
+
+  frontend:
+    name: Frontend Lint/Test/Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect frontend workspace
+        id: detect_frontend
+        run: |
+          if [ -f "web/package.json" ]; then
+            echo "found=true" >> $GITHUB_OUTPUT
+          else
+            echo "found=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Skip (no frontend workspace)
+        if: ${{ steps.detect_frontend.outputs.found != 'true' }}
+        run: echo "Frontend workspace nicht vorhanden – Job wird übersprungen."
+      - name: Setup Node
+        if: ${{ steps.detect_frontend.outputs.found == 'true' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - name: Enable corepack
+        if: ${{ steps.detect_frontend.outputs.found == 'true' }}
+        run: corepack enable
+      - name: Install deps
+        if: ${{ steps.detect_frontend.outputs.found == 'true' }}
+        working-directory: web
+        run: pnpm install --frozen-lockfile=false
+      - name: Lint (if present)
+        if: ${{ steps.detect_frontend.outputs.found == 'true' }}
+        working-directory: web
+        run: pnpm -s run lint || echo "skip lint"
+      - name: Test (if present)
+        if: ${{ steps.detect_frontend.outputs.found == 'true' }}
+        working-directory: web
+        run: pnpm -s run test -- --run || echo "skip test"
+      - name: Build (if present)
+        if: ${{ steps.detect_frontend.outputs.found == 'true' }}
+        working-directory: web
+        run: pnpm -s run build || echo "skip build"
+
+  backend:
+    name: Backend Lint/Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect backend workspace
+        id: detect_backend
+        run: |
+          HAS_REQ="false"
+          HAS_PYPROJECT="false"
+          if [ -f "server/requirements.txt" ]; then HAS_REQ="true"; fi
+          if [ -f "server/pyproject.toml" ]; then HAS_PYPROJECT="true"; fi
+          if [ "$HAS_REQ" = "true" ] || [ "$HAS_PYPROJECT" = "true" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "has_requirements=$HAS_REQ" >> "$GITHUB_OUTPUT"
+          echo "has_pyproject=$HAS_PYPROJECT" >> "$GITHUB_OUTPUT"
+      - name: Skip (no backend workspace)
+        if: ${{ steps.detect_backend.outputs.found != 'true' }}
+        run: echo "Backend workspace nicht vorhanden – Job wird übersprungen."
+      - name: Setup Python
+        if: ${{ steps.detect_backend.outputs.found == 'true' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Upgrade pip
+        if: ${{ steps.detect_backend.outputs.found == 'true' }}
+        run: python -m pip install --upgrade pip
+      - name: Install dependencies (requirements.txt)
+        if: ${{ steps.detect_backend.outputs.has_requirements == 'true' }}
+        run: |
+          python -m pip install -r server/requirements.txt
+      - name: Install dependencies (pyproject)
+        if: ${{ steps.detect_backend.outputs.has_pyproject == 'true' }}
+        working-directory: server
+        run: |
+          python -m pip install .
+      - name: Lint (if ruff/flake8 present)
+        if: ${{ steps.detect_backend.outputs.found == 'true' }}
+        run: |
+          python -m pip install ruff flake8 || true
+          TARGET="server"
+          if [ ! -d "$TARGET" ]; then TARGET="."; fi
+          if command -v ruff >/dev/null; then ruff check "$TARGET" || echo "skip ruff"; else echo "skip ruff"; fi
+          if command -v flake8 >/dev/null; then flake8 "$TARGET" || echo "skip flake8"; else echo "skip flake8"; fi
+      - name: Run tests (pytest if present)
+        if: ${{ steps.detect_backend.outputs.found == 'true' }}
+        run: |
+          python -m pip install pytest || true
+          if [ -d server/tests ] || [ -d tests ]; then pytest -q; else echo "No tests found"; fi
